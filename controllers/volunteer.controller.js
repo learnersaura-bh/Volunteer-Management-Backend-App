@@ -41,22 +41,25 @@ const addVolunteer = async (volunteer) => {
   
   
 
-const editVolunteer = async (volunteerId, editedVolunteer) => {
-  try {
-    const updatedVolunteer = await Volunteer.findByIdAndUpdate(volunteerId, editedVolunteer).populate({
-      path: "events",
-      select: "name location"
-    })
-    if (updatedVolunteer) {
-      console.log('Updated volunteer:', updatedVolunteer)
-      return updatedVolunteer
-    } else {
-      console.log('Unable to update volunteer')
+  const editVolunteer = async (volunteerId, editedVolunteer) => {
+    try {
+      const updatedVolunteer = await Volunteer.findByIdAndUpdate(volunteerId, editedVolunteer, { new: true }).populate({
+        path: "events",
+        select: "name location"
+      });
+      if (updatedVolunteer) {
+        console.log('Updated volunteer:', updatedVolunteer);
+        return updatedVolunteer;
+      } else {
+        console.log('Unable to update volunteer');
+        return null; 
+      }
+    } catch (error) {
+      console.log('Error editing volunteer:', error);
+      throw error; 
     }
-  } catch (error) {
-    console.log('Error editing volunteer:', error)
-  }
-}
+  };
+  
 
 const deleteVolunteer = async (volunteerId) => {
   try {
